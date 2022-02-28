@@ -10,4 +10,5 @@ app -> aplicação node.js
 mysql -> banco de dados mysql
 nginx -> configuração e dockerfile do nginx
 
-A aplicação verifica se o banco está vazio. Se estiver, ele insere três registros. Caso contrário, ela exibe os nomes das pessoas na tabela people.
+A aplicação verifica se o banco nodedb existe. Se não existir ele é criado e a tabela people é criada.
+Além disso, se a tabela people estiver vazia, a aplicação insere quatro registros. 
