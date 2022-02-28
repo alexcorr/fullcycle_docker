@@ -32,10 +32,10 @@ services:
       context: ./app
     image: alexcorr/nodechallangeapp
     container_name: app
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 30s node index.js
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 30s node src/index.js
     tty: true
     volumes:
-      - ./app:/usr/src/app
+      - ./app/src:/usr/src/app/src
     ports:
       - "3000:3000"
     networks:
