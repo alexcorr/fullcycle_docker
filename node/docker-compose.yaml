@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    command: --innodb-use-native-aio=0
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - nodenet
+
+  nginx:
+    build:
+      context: ./nginx
+    image: alexcorr/nodechallangenginx
+    container_name: nginx  
+    entrypoint: nginx -g 'daemon off;'
+    restart: always   
+    ports:
+      - "8080:80"
+    networks:
+      - nodenet
+
+  app:
+    build:
+      context: ./app
+    image: alexcorr/nodechallangeapp
+    container_name: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 30s node index.js
+    tty: true
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - "3000:3000"
+    networks:
+      - nodenet
+    depends_on:
+      - db
+
+
+networks:
+  nodenet:
+    driver: bridge
